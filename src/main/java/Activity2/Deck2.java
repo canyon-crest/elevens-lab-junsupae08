@@ -21,7 +21,6 @@ public class Deck2 {
 	 */
 	private int size;
 
-
 	/**
 	 * Creates a new <code>Deck</code> instance.<BR>
 	 * It pairs each element of ranks with each element of suits,
@@ -32,6 +31,14 @@ public class Deck2 {
 	 */
 	public Deck2(String[] ranks, String[] suits, int[] values) {
 		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
+		cards = new ArrayList<Card2>();
+		for (int i=0; i<ranks.length; i++) {
+			for (int j=0; j<suits.length; j++) {
+				Card2 cardOne = new Card2(ranks[i],suits[j], values[i]);
+				cards.add(cardOne);
+			}
+		
+		}
 	}
 
 
@@ -41,7 +48,7 @@ public class Deck2 {
 	 */
 	public boolean isEmpty() {
 		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
-		return true;
+		return cards.size()==0;
 	}
 
 	/**
@@ -50,7 +57,7 @@ public class Deck2 {
 	 */
 	public int size() {
 		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
-		return -1;
+		return cards.size();
 	}
 
 	/**
@@ -59,6 +66,7 @@ public class Deck2 {
 	 */
 	public void shuffle() {
 		/* *** TO BE IMPLEMENTED IN ACTIVITY 4 *** */
+		
 	}
 
 	/**
@@ -68,7 +76,10 @@ public class Deck2 {
 	 */
 	public Card2 deal() {
 		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
-		return new Card2("","",-1);
+		if (cards.size()==0) 
+			return null;
+		else
+			return cards.remove(0);
 	}
 
 	/**

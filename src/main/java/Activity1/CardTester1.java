@@ -10,5 +10,11 @@ public class CardTester1 {
 	 */
 	public static void main(String[] args) {
 		/* *** TO BE IMPLEMENTED IN ACTIVITY 1 *** */
+		Card1 cardOne = new Card1("King", "Spades", 13);
+		Card1 cardTwo = new Card1("Queen", "Hearts", 12);
+		Card1 cardThree = new Card1("Jack", "Clubs", 11);
+		System.out.println(cardOne.suit());
+		cardTwo.matches(cardThree);
+		cardThree.toString();
 	}
 }
