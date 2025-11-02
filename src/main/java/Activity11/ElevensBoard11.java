@@ -50,9 +50,9 @@ public class ElevensBoard11 extends Board11 {
 	public boolean isLegal(List<Integer> selectedCards) {
 		/* *** TO BE MODIFIED IN ACTIVITY 11 *** */
 		if (selectedCards.size() == 2) {
-			return containsPairSum11(selectedCards);
+			return findPairSum11(selectedCards).size()>0;
 		} else if (selectedCards.size() == 3) {
-			return containsJQK(selectedCards);
+			return findJQK(selectedCards).size()>0;
 		} else {
 			return false;
 		}
@@ -70,7 +70,7 @@ public class ElevensBoard11 extends Board11 {
 	public boolean anotherPlayIsPossible() {
 		/* *** TO BE MODIFIED IN ACTIVITY 11 *** */
 		List<Integer> cIndexes = cardIndexes();
-		return containsPairSum11(cIndexes) || containsJQK(cIndexes);
+		return findPairSum11(cIndexes).size() > 0 || findJQK(cIndexes).size() > 0;
 	}
 
 	/**
@@ -81,18 +81,22 @@ public class ElevensBoard11 extends Board11 {
 	 * @return a list of the indexes of an 11-pair, if an 11-pair was found;
 	 *         an empty list, if an 11-pair was not found.
 	 */
-	private boolean containsPairSum11(List<Integer> selectedCards) {
+	private List<Integer> findPairSum11(List<Integer> selectedCards) {
 		/* *** TO BE CHANGED INTO findPairSum11 IN ACTIVITY 11 *** */
-		for (int sk1 = 0; sk1 < selectedCards.size(); sk1++) {
-			int k1 = selectedCards.get(sk1).intValue();
-			for (int sk2 = sk1 + 1; sk2 < selectedCards.size(); sk2++) {
-				int k2 = selectedCards.get(sk2).intValue();
-				if (cardAt(k1).pointValue() + cardAt(k2).pointValue() == 11) {
-					return true;
+		List<Integer> pair = new ArrayList<>();
+		for (int i=0; i<selectedCards.size(); i++) {
+			int k1= selectedCards.get(i);
+			for (int j=i+1; j<selectedCards.size(); j++) {
+				int k2=selectedCards.get(j);
+				if(cardAt(k1).pointValue()+cardAt(k2).pointValue()==11) {
+					pair.add(k1);
+					pair.add(k2);
+					return pair;
 				}
+			
 			}
 		}
-		return false;
+		return pair;
 	}
 
 	/**
@@ -103,22 +107,31 @@ public class ElevensBoard11 extends Board11 {
 	 * @return a list of the indexes of a JQK, if a JQK was found;
 	 *         an empty list, if a JQK was not found.
 	 */
-	private boolean containsJQK(List<Integer> selectedCards) {
+	private List<Integer> findJQK(List<Integer> selectedCards) {
 		/* *** TO BE CHANGED INTO findJQK IN ACTIVITY 11 *** */
-		boolean foundJack = false;
-		boolean foundQueen = false;
-		boolean foundKing = false;
-		for (Integer kObj : selectedCards) {
-			int k = kObj.intValue();
-			if (cardAt(k).rank().equals("jack")) {
-				foundJack = true;
-			} else if (cardAt(k).rank().equals("queen")) {
-				foundQueen = true;
-			} else if (cardAt(k).rank().equals("king")) {
-				foundKing = true;
+		List<Integer> jqk = new ArrayList<>();
+		Integer jack=null;
+		Integer queen = null;
+		Integer king = null;
+		for (Integer i: selectedCards) {
+			int k=i;
+			String rank = cardAt(k).rank();
+			if(rank.equals("jack")&& jack==null) {
+				jack=k;
+			}
+			else if(rank.equals("queen")&& queen==null) {
+				queen=k;
+			}
+			else if(rank.equals("king")&&king==null) {
+				king=k;
 			}
 		}
-		return foundJack && foundQueen && foundKing;
+		if(jack!=null && queen!=null && king!=null) {
+			jqk.add(jack);
+			jqk.add(queen);
+			jqk.add(king);
+		}
+		return jqk;
 	}
 
 	/**
@@ -127,7 +140,13 @@ public class ElevensBoard11 extends Board11 {
 	 */
 	public boolean playIfPossible() {
 		/* *** TO BE IMPLEMENTED IN ACTIVITY 11 *** */
-		return false; // REPLACE !
+		if(playPairSum11IfPossible()) {
+			return true;
+		}
+		if (playJQKIfPossible()) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -138,7 +157,14 @@ public class ElevensBoard11 extends Board11 {
 	 */
 	private boolean playPairSum11IfPossible() {
 		/* *** TO BE IMPLEMENTED IN ACTIVITY 11 *** */
-		 return false; // REPLACE !
+		 List<Integer> cIndexes= cardIndexes();
+		 List<Integer> pair = findPairSum11(cIndexes);
+		 if(pair.size()>0) {
+			 replaceSelectedCards(pair);
+			 return true;
+		 }
+		 return false;
+		 
 	}
 
 	/**
@@ -149,6 +175,12 @@ public class ElevensBoard11 extends Board11 {
 	 */
 	private boolean playJQKIfPossible() {
 		/* *** TO BE IMPLEMENTED IN ACTIVITY 11 *** */
-		return false; // REPLACE !
+		List<Integer> cIndexes = cardIndexes();
+	    List<Integer> jqk = findJQK(cIndexes);
+	    if(jqk.size()>0) {
+	    	replaceSelectedCards(jqk);
+	    	return true;
+	    }
+	    return false;
 	}
 }
